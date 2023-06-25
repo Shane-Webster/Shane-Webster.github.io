@@ -1,107 +1,154 @@
 <!DOCTYPE html>
 <canvas id="background-canvas"></canvas>
 <html>
-    <head>
-        <title>Portfolio - Shane Webster</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {
-                background-color:#ffffff;
-                background-repeat:no-repeat;
-                background-position:top left;
-                background-attachment:fixed;
-            }
-            h1 {
-                font-family:Arial, sans-serif;
-                color:#000000;
-                background-color:#ffffff;
-            }
-            p {
-                font-family:Georgia, serif;
-                font-size:14px;font-style:normal;
-                font-weight:normal;
-                color:#000000;
-                background-color:#ffffff;
-            }
-            #background-canvas {
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: -1;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Text</h1>
-        <p>Body Text</p>
-    </body>
-  <head>
+<head>
     <title>Portfolio - Shane Webster</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-    body {background-color:#ffffff;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
-    h1{font-family:Arial, sans-serif;color:#000000;background-color:#ffffff;}
-    p {font-family:Georgia, serif;font-size:14px;font-style:normal;font-weight:normal;color:#000000;background-color:#ffffff;}
+        body {
+            background-repeat: no-repeat;
+            background-position: top left;
+            background-attachment: fixed;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            font-family: Georgia, serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: normal;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .toggle-btn {
+            display: inline-block;
+            background-color: #555;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
     </style>
-  </head>
-  <body>
-    <h1>Text</h1>
-    <p>Body Text</p>
-  </body>
+</head>
+
+<body>
+
+    <div class="content">
+        <button class="toggle-btn" onclick="toggleMode()">Toggle Mode</button>
+        <h1>Text</h1>
+        <p>Body Text</p>
+    </div>
+
+</body>
+
 </html>
+
+<script src="https://unpkg.com/trianglify@^4/dist/trianglify.bundle.js"></script>
+
 <script>
-    // Get the canvas element
+
     var canvas = document.getElementById("background-canvas");
-    var ctx = canvas.getContext("2d");
 
-    // Set the canvas size to match the window size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    var intensity = 0.5;
+    var intensityStep = 0.0005;
+    var animationInterval = 5; // Animation frame duration in milliseconds
 
-    // Define the pattern properties
-    var patternSize = 100; // Adjust the size of each pattern element
-    var patternGap = 20; // Adjust the gap between pattern elements
-    var patternColor = getRandomColor(); // Random color for the pattern elements
+    // Generate the initial pattern seed
+    var seed = String(Math.random());
 
-    // Generate a random color for the shapes
-    function getRandomColor() {
-        var letters = "0123456789ABCDEF";
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+    //console.log(seed);
+
+    var pattern = null;
+
+    const canvasOpts = {
+        scaling: 'auto',
+        applyCssScaling: true
     }
 
-    // Draw the background pattern
-    function drawBackground() {
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //Color palettes
+    const dark = ['#222253', '#28345A', '#36616C', '#222253'];
+    const light = ['#f7fcf0', '#e0f3db', '#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe', '#0868ac', '#084081'];
 
-        // Calculate the number of pattern elements in each row and column
-        var numRows = Math.ceil(canvas.height / (patternSize + patternGap));
-        var numCols = Math.ceil(canvas.width / (patternSize + patternGap));
+    //Dark mode by default
+    var colorPalette = dark;
 
-        // Draw the pattern elements
-        for (var row = 0; row < numRows; row++) {
-            for (var col = 0; col < numCols; col++) {
-                var x = col * (patternSize + patternGap);
-                var y = row * (patternSize + patternGap);
+    function toggleMode() {
+        const body = document.querySelector('body');
+        const toggleBtn = document.querySelector('.toggle-btn');
 
-                // Draw the shape
-                ctx.fillStyle = patternColor;
-                ctx.fillRect(x, y, patternSize, patternSize);
-            }
+        if (colorPalette == dark) {
+            //Change trianglify palette
+            colorPalette = light;
+
+            //Change button color
+            body.style.color = '#333';
+            toggleBtn.style.color = '#333';
+        } else {
+            //Change trianglify palette
+            colorPalette = dark;
+
+            //Change button color
+            body.style.color = '#fff';
+            toggleBtn.style.color = '#fff';
         }
     }
 
-    // Redraw the background when the window is resized
-    window.addEventListener("resize", function () {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        drawBackground();
-    });
+    function generatePattern(seed, colorPalette, intensity) {
+        return trianglify({
+            seed: seed,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            cellSize: 120,
+            variance: 0.75,
+            xColors: colorPalette,
+            yColors: 'match',
+            palette: trianglify.colorbrewer,
+            colorFunction: trianglify.colorFunctions.interpolateLinear(intensity),
+            strokeWidth: 0,
+        })
+    }
 
-    // Initial drawing of the background
-    drawBackground();
+    function animate() {
+        // Update the variance value
+        intensity += intensityStep;
+
+        // Clamp the variance within a certain range
+        if (intensity <= 0.25 || intensity >= 1.0) {
+            intensityStep *= -1;
+        }
+
+        pattern = generatePattern(seed, colorPalette, intensity);
+        pattern.toCanvas(canvas, canvasOpts);
+
+
+        // Call animate function again after the specified interval
+        setTimeout(animate, animationInterval);
+    }
+
+    animate();
+
 </script>
