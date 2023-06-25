@@ -58,7 +58,12 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Generate a random color for the lines
+    // Define the pattern properties
+    var patternSize = 100; // Adjust the size of each pattern element
+    var patternGap = 20; // Adjust the gap between pattern elements
+    var patternColor = getRandomColor(); // Random color for the pattern elements
+
+    // Generate a random color for the shapes
     function getRandomColor() {
         var letters = "0123456789ABCDEF";
         var color = "#";
@@ -73,21 +78,20 @@
         // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Generate lines with random positions and colors
-        for (var i = 0; i < 100; i++) {
-            var x1 = Math.random() * canvas.width;
-            var y1 = Math.random() * canvas.height;
-            var x2 = Math.random() * canvas.width;
-            var y2 = Math.random() * canvas.height;
-            var color = getRandomColor();
+        // Calculate the number of pattern elements in each row and column
+        var numRows = Math.ceil(canvas.height / (patternSize + patternGap));
+        var numCols = Math.ceil(canvas.width / (patternSize + patternGap));
 
-            // Draw the line
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1;
-            ctx.stroke();
+        // Draw the pattern elements
+        for (var row = 0; row < numRows; row++) {
+            for (var col = 0; col < numCols; col++) {
+                var x = col * (patternSize + patternGap);
+                var y = row * (patternSize + patternGap);
+
+                // Draw the shape
+                ctx.fillStyle = patternColor;
+                ctx.fillRect(x, y, patternSize, patternSize);
+            }
         }
     }
 
