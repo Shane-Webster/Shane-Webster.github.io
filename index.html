@@ -13,7 +13,7 @@
 
         h1 {
             font-family: Arial, sans-serif;
-            color: #000000;
+            color: ghostwhite;
             margin: 0;
             padding: 0;
         }
@@ -23,7 +23,7 @@
             font-size: 14px;
             font-style: normal;
             font-weight: normal;
-            color: #000000;
+            color: ghostwhite;
             margin: 0;
             padding: 0;
         }
@@ -42,25 +42,62 @@
             z-index: 2;
         }
 
-        .toggle-btn {
-            display: inline-block;
-            background-color: #555;
-            color: #fff;
-            padding: 10px 20px;
+        label {
+            position: relative;
+            width: 120px;
+            height: 45px;
+            display: block;
+            background: #d9d9d9;
+            border-radius: 25px;
             cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            box-shadow: inset 0px 5px 15px rgba(0,0,0,0.3), inset 0px -5px 15px rgba(255,255,255,0.3);
         }
+
+        label:after {
+            content: '';
+            position: absolute;
+            height: 40px;
+            width: 40px;
+            background: #f2f2f2;
+            border-radius: 25px;
+            top: 2.5px;
+            left: 2.5px;
+            transition: 0.5s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        input:checked ~ label:after {
+            left: 117.5px;
+            transform: translateX(-100%);
+            background: linear-gradient(180deg,#777,#3a3a3a);
+        }
+
+        input:checked ~ label {
+            background: #242424;
+        }
+
+        input {
+            display: none;
+        }
+
+        .text-light-mode {
+            color: black;
+        }
+
     </style>
 </head>
 
 <body>
 
     <div class="content">
-        <button class="toggle-btn" onclick="toggleMode()">Toggle Mode</button>
+
+        <!-- Darkmode checkbox -->
+        <input class="darkModeCheckbox" type="checkbox" id="dark-mode" checked> 
+        <label for="dark-mode"></label>
+
         <h1>Text</h1>
         <p>Body Text</p>
+
     </div>
 
 </body>
@@ -74,8 +111,8 @@
     var canvas = document.getElementById("background-canvas");
 
     var intensity = 0.5;
-    var intensityStep = 0.0005;
-    var animationInterval = 5; // Animation frame duration in milliseconds
+    var intensityStep = 0.001;
+    var animationInterval = 10; // Animation frame duration in milliseconds
 
     // Generate the initial pattern seed
     var seed = String(Math.random());
@@ -96,26 +133,32 @@
     //Dark mode by default
     var colorPalette = dark;
 
-    function toggleMode() {
-        const body = document.querySelector('body');
-        const toggleBtn = document.querySelector('.toggle-btn');
+    const darkCheckbox = document.querySelector('.darkModeCheckbox');
+    const paragraphs = document.querySelectorAll('p');
+    const headings = document.querySelectorAll('h1');
 
-        if (colorPalette == dark) {
-            //Change trianglify palette
-            colorPalette = light;
-
-            //Change button color
-            body.style.color = '#333';
-            toggleBtn.style.color = '#333';
-        } else {
-            //Change trianglify palette
+    //Listen for checkbox change - change trianglify color palette and text color
+    darkCheckbox.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
             colorPalette = dark;
 
-            //Change button color
-            body.style.color = '#fff';
-            toggleBtn.style.color = '#fff';
+            paragraphs.forEach(function (p) {
+                p.classList.remove('text-light-mode');
+            });
+            headings.forEach(function (h1) {
+                h1.classList.remove('text-light-mode');
+            });
+        } else {
+            colorPalette = light;
+
+            paragraphs.forEach(function (p) {
+                p.classList.add('text-light-mode');
+            });
+            headings.forEach(function (h1) {
+                h1.classList.add('text-light-mode');
+            });
         }
-    }
+    })
 
     function generatePattern(seed, colorPalette, intensity) {
         return trianglify({
