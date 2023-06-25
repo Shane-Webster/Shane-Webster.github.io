@@ -1,5 +1,42 @@
 <!DOCTYPE html>
+<canvas id="background-canvas"></canvas>
 <html>
+<<<<<<< HEAD
+    <head>
+        <title>Portfolio - Shane Webster</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                background-color:#ffffff;
+                background-repeat:no-repeat;
+                background-position:top left;
+                background-attachment:fixed;
+            }
+            h1 {
+                font-family:Arial, sans-serif;
+                color:#000000;
+                background-color:#ffffff;
+            }
+            p {
+                font-family:Georgia, serif;
+                font-size:14px;font-style:normal;
+                font-weight:normal;
+                color:#000000;
+                background-color:#ffffff;
+            }
+            #background-canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Text</h1>
+        <p>Body Text</p>
+    </body>
+=======
   <head>
     <title>Portfolio - Shane Webster</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,4 +50,57 @@
     <h1>Text</h1>
     <p>Body Text</p>
   </body>
+>>>>>>> 34333a5f332801a23a9362b934bea2406774c188
 </html>
+<script>
+    // Get the canvas element
+    var canvas = document.getElementById("background-canvas");
+    var ctx = canvas.getContext("2d");
+
+    // Set the canvas size to match the window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Generate a random color for the lines
+    function getRandomColor() {
+        var letters = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // Draw the background pattern
+    function drawBackground() {
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Generate lines with random positions and colors
+        for (var i = 0; i < 100; i++) {
+            var x1 = Math.random() * canvas.width;
+            var y1 = Math.random() * canvas.height;
+            var x2 = Math.random() * canvas.width;
+            var y2 = Math.random() * canvas.height;
+            var color = getRandomColor();
+
+            // Draw the line
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    // Redraw the background when the window is resized
+    window.addEventListener("resize", function () {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawBackground();
+    });
+
+    // Initial drawing of the background
+    drawBackground();
+</script>
