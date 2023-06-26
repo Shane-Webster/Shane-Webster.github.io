@@ -24,7 +24,7 @@ const canvasOpts = {
 
 //Color palettes
 const dark = ['#222253', '#28345A', '#36616C', '#222253'];
-const light = ['#f7fcf0', '#e0f3db', '#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe', '#0868ac', '#084081'];
+const light = ['#2b8cbe', '#4eb3d3', '#7bccc4', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe'];
 
 //Dark mode by default
 var darkMode = true;
