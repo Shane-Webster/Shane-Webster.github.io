@@ -28,7 +28,7 @@ const light = ['#f7fcf0', '#e0f3db', '#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3',
 //Dark mode by default
 var colorPalette = dark;
 
-const darkCheckbox = document.querySelector('.darkModeCheckbox');
+const darkCheckbox = document.getElementsByClassName('theme__toggle')[0];
 const paragraphs = document.querySelectorAll('p');
 const headings = document.querySelectorAll('h1');
 
