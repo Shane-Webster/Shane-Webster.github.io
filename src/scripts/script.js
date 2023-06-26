@@ -3,7 +3,8 @@
  * Portfolio website javascript
  */
 
-var canvas = document.getElementById("background-canvas");
+var canvasLight = document.getElementById("background-canvas-light");
+var canvasDark = document.getElementById("background-canvas-dark");
 
 var intensity = 0.5;
 var intensityStep = 0.001;
@@ -26,7 +27,7 @@ const dark = ['#222253', '#28345A', '#36616C', '#222253'];
 const light = ['#f7fcf0', '#e0f3db', '#ccebc5', '#a8ddb5', '#7bccc4', '#4eb3d3', '#2b8cbe', '#0868ac', '#084081'];
 
 //Dark mode by default
-var colorPalette = dark;
+var darkMode = true;
 
 const darkCheckbox = document.getElementsByClassName('theme__toggle')[0];
 const paragraphs = document.querySelectorAll('p');
@@ -35,7 +36,7 @@ const headings = document.querySelectorAll('h1');
 //Listen for checkbox change - change trianglify color palette and text color
 darkCheckbox.addEventListener('change', (event) => {
     if (event.currentTarget.checked) {
-        colorPalette = dark;
+        darkMode = true;
 
         paragraphs.forEach(function (p) {
             p.classList.remove('text-light-mode');
@@ -43,8 +44,12 @@ darkCheckbox.addEventListener('change', (event) => {
         headings.forEach(function (h1) {
             h1.classList.remove('text-light-mode');
         });
+
+        canvasDark.style.opacity = 1;
+        canvasLight.style.opacity = 0;
+        darkCanvas.style.animation = 'wipe-effect 0.5s forwards ease';
     } else {
-        colorPalette = light;
+        darkMode = false;
 
         paragraphs.forEach(function (p) {
             p.classList.add('text-light-mode');
@@ -52,6 +57,10 @@ darkCheckbox.addEventListener('change', (event) => {
         headings.forEach(function (h1) {
             h1.classList.add('text-light-mode');
         });
+
+        canvasDark.style.opacity = 0;
+        canvasLight.style.opacity = 1;
+        darkCanvas.style.animation = '';
     }
 })
 
@@ -79,10 +88,16 @@ function animate() {
         intensityStep *= -1;
     }
 
-    pattern = generatePattern(seed, colorPalette, intensity);
-    pattern.toCanvas(canvas, canvasOpts);
+    if (darkMode == true) {
+        pattern = generatePattern(seed, dark, intensity);
 
+        pattern.toCanvas(canvasDark, canvasOpts);
+    } else {
+        pattern = generatePattern(seed, light, intensity);
 
+        pattern.toCanvas(canvasLight, canvasOpts);
+    }
+    
     // Call animate function again after the specified interval
     setTimeout(animate, animationInterval);
 }

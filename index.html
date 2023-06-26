@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<canvas id="background-canvas"></canvas>
 <html>
 <head>
     <title>Portfolio - Shane Webster</title>
     <!-- Add Google font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Fredoka&amp;display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka&amp;display=swap"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="src/style/style.css" />
+    <link rel="stylesheet" href="src/style/style.css"/>
 </head>
 
 <body>
 
+    <div class="background-container">
+        <canvas id="background-canvas-light"></canvas>
+        <canvas id="background-canvas-dark"></canvas>
+    </div>
+
     <div class="content">
 
-        <!-- Darkmode checkbox -->
+        <!-- Light/Dark theme toggle from Navid Dev -->
         <label for="theme" class="theme">
             <span>Light</span>
             <span class="theme__toggle-wrap">
