@@ -47,7 +47,6 @@ darkCheckbox.addEventListener('change', (event) => {
 
         canvasDark.style.opacity = 1;
         canvasLight.style.opacity = 0;
-        darkCanvas.style.animation = 'wipe-effect 0.5s forwards ease';
     } else {
         darkMode = false;
 
@@ -60,7 +59,6 @@ darkCheckbox.addEventListener('change', (event) => {
 
         canvasDark.style.opacity = 0;
         canvasLight.style.opacity = 1;
-        darkCanvas.style.animation = '';
     }
 })
 
